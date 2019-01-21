@@ -33,8 +33,9 @@ public abstract class BaseMvpPresenterActivity<P extends BasePresenter> extends 
     private void initLoadDialog() {
         loadingDialog = new ProgressDialog(BaseMvpPresenterActivity.this);
         loadingDialog.setCancelable(false);
-        loadingDialog.setMessage("正在加载中...");
+        loadingDialog.setMessage("正在进行中...");
     }
+
 
     @Override
     protected void onDestroy() {

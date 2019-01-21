@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">InspectionOfAssets</string>
+    <string name="app_name">资产清查</string>
+    <string name="text">当前资产编号为：%1$s</string>
+    <string name="text_task">当前清查任务：%1$s</string>
+    <string name="text_select">请您选择清查任务</string>
+    <string name="text_helper">帮助</string>
+    <string name="text_result">盘点结果</string>
+    <string name="text_inventory">盘点</string>
 </resources>
