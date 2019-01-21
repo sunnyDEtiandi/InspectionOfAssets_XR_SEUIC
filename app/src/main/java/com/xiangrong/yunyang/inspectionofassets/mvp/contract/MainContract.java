@@ -5,11 +5,11 @@ import android.content.Context;
 import com.xiangrong.yunyang.inspectionofassets.base.IBaseModel;
 import com.xiangrong.yunyang.inspectionofassets.base.IBaseView;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainCheckCallBack;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainDeleteCallBack;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainExportCallBack;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainImportCallBack;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainRecyCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.main.MainCheckCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.main.MainDeleteCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.main.MainExportCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.main.MainImportCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.main.MainRecyCallBack;
 
 import java.io.File;
 import java.util.List;

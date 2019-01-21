@@ -1,4 +1,4 @@
-package com.xiangrong.yunyang.inspectionofassets.mvp.callback;
+package com.xiangrong.yunyang.inspectionofassets.mvp.callback.main;
 
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
 

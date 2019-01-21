@@ -144,8 +144,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                             Toast.makeText(MainActivity.this, R.string.text_select, Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        Intent intentScan = new Intent(MainActivity.this, ScanActivity.class);
-//                        startActivity(intentScan);
+                        Intent intentScan = new Intent(MainActivity.this, ScanActivity.class);
+                        startActivity(intentScan);
                         break;
                     // 查询
                     case 3:
