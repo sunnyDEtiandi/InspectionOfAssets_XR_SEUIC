@@ -153,8 +153,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                             Toast.makeText(MainActivity.this, R.string.text_select, Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        Intent intentQueryData = new Intent(MainActivity.this, QueryDataActivity.class);
-//                        startActivity(intentQueryData);
+                        Intent intentQueryData = new Intent(MainActivity.this, QueryDataActivity.class);
+                        startActivity(intentQueryData);
                         break;
                     // 移除
                     case 4:
