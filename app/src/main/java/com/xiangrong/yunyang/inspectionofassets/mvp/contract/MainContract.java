@@ -7,6 +7,7 @@ import com.xiangrong.yunyang.inspectionofassets.base.IBaseView;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainCheckCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainDeleteCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainExportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainImportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainRecyCallBack;
 
@@ -35,6 +36,9 @@ public interface MainContract {
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String currentFileName, Context context, MainDeleteCallBack deleteCallBack);
 
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        void exportExcel(String currentFileName, Context context, MainExportCallBack exportCallBack);
+
     }
 
     interface View extends IBaseView {
@@ -57,6 +61,9 @@ public interface MainContract {
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String select_text_string);
 
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        void exportExcel(String select_text_string);
+
     }
 
     interface Presenter {
@@ -72,6 +79,9 @@ public interface MainContract {
 
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String currentFileName, boolean flag, Context context);
+
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        void exportExcel(String currentFileName, Context context);
 
     }
 

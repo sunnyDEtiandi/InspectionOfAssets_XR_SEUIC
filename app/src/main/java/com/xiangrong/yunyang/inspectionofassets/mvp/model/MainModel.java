@@ -7,9 +7,12 @@ import com.xiangrong.yunyang.inspectionofassets.R;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainCheckCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainDeleteCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainExportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainImportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainRecyCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.contract.MainContract;
+import com.xiangrong.yunyang.inspectionofassets.utils.ExcelUtils;
+import com.xiangrong.yunyang.inspectionofassets.utils.FileUtil;
 
 import org.litepal.LitePal;
 
@@ -27,6 +30,10 @@ import jxl.Workbook;
  * 描述   MainActivity的数据类
  */
 public class MainModel implements MainContract.Model {
+
+    private String[] columnTitle = {"资产编号", "资产名称", "资产分类", "国标分类", "实有数量", "实有原值", "实有累计折旧", "盘点结果", "使用状况", "产品序列号",
+            "账面数量", "账面价值", "账面累计折旧", "账面净值", "取得方式", "规格型号", "计量单位", "取得日期", "财务入账日期", "价值类型", "存放地点", "使用部门", "使用人",
+            "原资产编号", "备注"};
 
     // RecyclerView
     private List<String> recyTextData;
@@ -204,6 +211,48 @@ public class MainModel implements MainContract.Model {
                 super.onPostExecute(aVoid);
                 if (aVoid == 1) {
                     deleteCallBack.ExcelDataToDb(context.getString(R.string.text_select));
+                }
+            }
+        }.execute();
+    }
+
+    /**
+     * 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+     */
+    @Override
+    public void exportExcel(String currentFileName, Context context, MainExportCallBack exportCallBack) {
+        new AsyncTask<String, Void, Integer>() {
+
+            @Override
+            protected Integer doInBackground(String... params) {
+                try {
+                    // 创建Excel表格
+                    ExcelUtils
+                            .initExcel2016(FileUtil
+                                    .createFile(currentFileName)
+                                    .getAbsolutePath(), columnTitle);
+                    mList.clear();
+                    /*
+                        编写导出LitePal语句，导出Excel表格依据26列（所属数据表进行导出）
+                     */
+                    mList = LitePal.findAll(School.class);
+                    ExcelUtils.writeSchoolListToExcel(mList, FileUtil
+                            .createFile(currentFileName)
+                            .getAbsolutePath(), context);
+                    return 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return 0;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Integer aVoid) {
+                super.onPostExecute(aVoid);
+                if (aVoid == 1) {
+                    exportCallBack.exportSuccess();
+                } else {
+                    exportCallBack.exportFailure();
                 }
             }
         }.execute();

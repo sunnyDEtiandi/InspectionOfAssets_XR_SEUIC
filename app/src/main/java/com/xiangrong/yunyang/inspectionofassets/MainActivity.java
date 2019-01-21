@@ -136,7 +136,7 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                             Toast.makeText(MainActivity.this, R.string.text_select, Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        checkDbExportExcel();
+                        checkDbExportExcel();
                         break;
                     // 盘点
                     case 2:
@@ -178,6 +178,11 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                 }
             }
         });
+    }
+
+    private void checkDbExportExcel() {
+        mPresenter.exportExcel(currentFile.getName(), MainActivity.this);
+        mPresenter.deleteExcel(currentFile.getName(), false, MainActivity.this);
     }
 
     private void checkDbImportExcel() {
@@ -321,6 +326,11 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
 
     @Override
     public void deleteExcel(String select_text_string) {
+        selectTextDbFileExcel.setText(select_text_string);
+    }
+
+    @Override
+    public void exportExcel(String select_text_string) {
         selectTextDbFileExcel.setText(select_text_string);
     }
 

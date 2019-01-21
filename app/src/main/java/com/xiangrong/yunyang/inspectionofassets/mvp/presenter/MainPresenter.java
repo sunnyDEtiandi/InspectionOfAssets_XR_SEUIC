@@ -6,6 +6,7 @@ import com.xiangrong.yunyang.inspectionofassets.base.BasePresenter;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainCheckCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainDeleteCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainExportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainImportCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.MainRecyCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.contract.MainContract;
@@ -119,6 +120,33 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
                 if (flag) {
                     getView().dismissLoading();
                 }
+            }
+        });
+    }
+
+    /**
+     * 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+     */
+    @Override
+    public void exportExcel(String currentFileName, Context context) {
+        getView().showLoading();
+        getModule().exportExcel(currentFileName, context, new MainExportCallBack() {
+            @Override
+            public void exportDataToDb(String select_text_string) {
+                getView().exportExcel(select_text_string);
+                getView().dismissLoading();
+            }
+
+            @Override
+            public void exportSuccess() {
+                getView().onSuccess();
+                getView().dismissLoading();
+            }
+
+            @Override
+            public void exportFailure() {
+                getView().onFailure();
+                getView().dismissLoading();
             }
         });
     }
