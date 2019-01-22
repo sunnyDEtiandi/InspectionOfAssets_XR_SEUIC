@@ -19,7 +19,7 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".QueryDataActivity" />
         <!-- 特定设备 -->
-        <uses-library android:name="android.scanner.library" />
+        <!--<uses-library android:name="android.scanner.library" />-->
         <service android:name=".service.ScannerService" />
 
         <activity android:name=".ScanActivity" />

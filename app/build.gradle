@@ -6,7 +6,7 @@ android {
     defaultConfig {
         applicationId "com.xiangrong.yunyang.inspectionofassets"
         minSdkVersion 16
-        targetSdkVersion 22
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -73,4 +73,9 @@ dependencies {
     // butterknife
     implementation 'com.jakewharton:butterknife:9.0.0-rc2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc2'
+    // PermissionsDispatcher
+    implementation ('com.github.hotchemi:permissionsdispatcher:2.4.0', {
+        exclude group: 'com.android.support'
+    })
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 }

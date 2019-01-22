@@ -1,9 +1,11 @@
 package com.xiangrong.yunyang.inspectionofassets;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
@@ -35,6 +37,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.LitePal;
 
 import java.io.File;
+import java.lang.ref.ReferenceQueue;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +47,12 @@ import java.util.Vector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.OnShowRationale;
+import permissions.dispatcher.PermissionRequest;
+import permissions.dispatcher.RuntimePermissions;
 
+@RuntimePermissions
 public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implements MainContract.View {
 
     @BindView(R.id.tv_inventory_title)
@@ -100,7 +108,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         mRecyTextString = new ArrayList<>();
         mRecyImageDrawable = new ArrayList<>();
         excelDataToDb = new ArrayList<>();
-        initFileDir();
+        // 创建特定文件夹以存放Excel表
+        mFileDir = FileUtil.createDir("XR");
         mSlideFromBottomPopup =
                 new SlideFromBottomPopup(MainActivity.this, mFileDir.getAbsolutePath());
         initRecy();
@@ -204,13 +213,6 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     }
 
     /**
-     * 创建特定文件夹以存放Excel表
-     */
-    private void initFileDir() {
-        mFileDir = FileUtil.createDir("XR");
-    }
-
-    /**
      * 双击退出
      */
     @Override
@@ -231,6 +233,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
 
     @OnClick(R.id.select_text_db_file_excel)
     public void onViewClicked() {
+        MainActivityPermissionsDispatcher.initFileDirWithCheck(MainActivity.this);
+        // 显示底部弹出框供用户选择Excel表
         mSlideFromBottomPopup.newPopupBottomShow();
     }
 
@@ -369,4 +373,39 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         }
     }
 
+
+    @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void initFileDir() {
+        // 创建特定文件夹以存放Excel表
+        mFileDir = FileUtil.createDir("XR");
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
+    void whyReadWritePer(final PermissionRequest request) {
+        new QMUIDialog.MessageDialogBuilder(MainActivity.this)
+                .setMessage("使用此App需要读写手机存储和启用照相机权限，下一步将继续请求权限")
+                .addAction("下一步", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        // 继续执行请求
+                        request.proceed();
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        // 取消执行请求
+                        request.cancel();
+                        dialog.dismiss();
+                    }
+                })
+                .show();
+    }
 }
