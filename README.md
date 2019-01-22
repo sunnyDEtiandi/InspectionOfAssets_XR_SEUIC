@@ -32,3 +32,5 @@
 完成删除功能。
 
 DataConversion项目修改为Mvp架构InspectionOfAssets项目结束。
+
+适配Android6.0权限机制。
