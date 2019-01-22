@@ -15,8 +15,23 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->  // each 改为 all
+                    def fileName = "资产清查.apk"
+                    def outFile = output.outputFile
+                    if (outFile != null && outFile.name.endsWith('.apk')) {
+                        outputFileName = fileName  //  output.outputFile 改为 outputFileName
+                    }
+                    //删除unaligned apk
+                    if (output.zipAlign != null) {
+                        output.zipAlign.doLast {
+                        }
+                    }
+                }
+            }
         }
     }
+    //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
     lintOptions {
         checkReleaseBuilds false
         // Or, if you prefer, you can continue to check for errors in release builds,
