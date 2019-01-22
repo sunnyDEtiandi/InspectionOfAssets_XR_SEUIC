@@ -39,6 +39,9 @@ public interface MainContract {
         // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String currentFileName, Context context, MainExportCallBack exportCallBack);
 
+        // 检查——有数据进行弹出Dialog——删除
+        void checkExcelCountDelete(String currentFileName, MainCheckCallBack checkCallBack);
+
     }
 
     interface View extends IBaseView {
@@ -50,7 +53,7 @@ public interface MainContract {
         void checkExcelNameFromDb(int count);
 
         // 导入——Excel表格导入到本地数据库中
-        void importExcelComplete(List<School> list);
+        void importExcelComplete(List<School> list, String currentFileName);
 
         // 操作成功
         void onSuccess();
@@ -63,6 +66,9 @@ public interface MainContract {
 
         // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String select_text_string);
+
+        // 检查——有数据进行弹出Dialog——删除
+        void checkExcelCountDelete(int count);
 
     }
 
@@ -82,6 +88,9 @@ public interface MainContract {
 
         // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String currentFileName, Context context);
+
+        // 检查——有数据进行弹出Dialog——删除
+        void checkExcelCountDelete(String currentFileName);
 
     }
 

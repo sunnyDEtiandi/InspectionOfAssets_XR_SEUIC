@@ -162,11 +162,11 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                             Toast.makeText(MainActivity.this, R.string.text_select, Toast.LENGTH_SHORT).show();
                             return;
                         }
-//                        if (currentFile != null) {
-//                            checkDbDeleteExcel();
-//                        } else {
-//                            Toast.makeText(MainActivity.this, "请选中要从本地数据库中删除之前导入的Excel文件名称", Toast.LENGTH_LONG).show();
-//                        }
+                        if (currentFile != null) {
+                            checkDbDeleteExcel();
+                        } else {
+                            Toast.makeText(MainActivity.this, "请选中要从本地数据库中删除之前导入的Excel文件名称", Toast.LENGTH_LONG).show();
+                        }
                         break;
                     // 帮助
                     case 5:
@@ -178,6 +178,10 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                 }
             }
         });
+    }
+
+    private void checkDbDeleteExcel() {
+        mPresenter.checkExcelCountDelete(currentFile.getName());
     }
 
     private void checkDbExportExcel() {
@@ -267,7 +271,6 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
 
     @Override
     public void checkExcelNameFromDb(int count) {
-        Log.e("神奇奇迹", "count = " + count);
         if (count > 0) {
             new QMUIDialog.MessageDialogBuilder(MainActivity.this)
                     .setTitle("提示")
@@ -299,9 +302,15 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     }
 
     @Override
-    public void importExcelComplete(List<School> list) {
-        excelDataToDb.clear();
-        excelDataToDb.addAll(list);
+    public void importExcelComplete(List<School> list, String currentFileName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                excelDataToDb.clear();
+                excelDataToDb.addAll(list);
+                selectTextDbFileExcel.setText(getString(R.string.text_task, currentFileName));
+            }
+        });
     }
 
     @Override
@@ -332,6 +341,32 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     @Override
     public void exportExcel(String select_text_string) {
         selectTextDbFileExcel.setText(select_text_string);
+    }
+
+    @Override
+    public void checkExcelCountDelete(int count) {
+        if (count > 0) {
+            new QMUIDialog.MessageDialogBuilder(MainActivity.this)
+                    .setTitle("提示")
+                    .setMessage("是否从本地数据库中移除当前Excel表格数据")
+                    .addAction("取消", new QMUIDialogAction.ActionListener() {
+                        @Override
+                        public void onClick(QMUIDialog dialog, int index) {
+                            dialog.dismiss();
+                        }
+                    })
+                    .addAction("确定", new QMUIDialogAction.ActionListener() {
+                        @Override
+                        public void onClick(QMUIDialog dialog, int index) {
+                            mPresenter.deleteExcel(currentFile.getName(), true, MainActivity.this);
+                            Toast.makeText(MainActivity.this, "从本地数据库中删除 " + currentFile.getName() + " 成功", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
+                        }
+                    })
+                    .show();
+        } else {
+            Toast.makeText(MainActivity.this, "本地数据库中无当前Excel表格数据", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

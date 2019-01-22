@@ -65,6 +65,7 @@ public class DishModel implements DishContract.Model {
                 if (aVoid == 1) {
                     queryDataDishCallBack.updateUIInitRecy(mDbToSchoolList);
                 } else {
+                    queryDataDishCallBack.updateFailure();
                 }
             }
         }.execute(inventoryResults);

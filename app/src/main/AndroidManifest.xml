@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xiangrong.yunyang.inspectionofassets">
     <!-- 照相机权限 -->
-    <uses-permission android:name="android.permission.CAMERA" /> <!-- 存储读写权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 存储读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -16,9 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".QueryDataActivity"></activity>
+        <activity android:name=".QueryDataActivity" />
         <!-- 特定设备 -->
-        <!-- <uses-library android:name="android.scanner.library" /> -->
+        <uses-library android:name="android.scanner.library" />
         <service android:name=".service.ScannerService" />
 
         <activity android:name=".ScanActivity" />

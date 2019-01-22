@@ -13,7 +13,7 @@ import java.util.List;
 public interface MainImportCallBack {
 
     // 导入——List<School>
-    void importDataToDb(List<School> list);
+    void importDataToDb(List<School> list, String currentFileName);
 
     // 导入——成功
     void importSuccess();

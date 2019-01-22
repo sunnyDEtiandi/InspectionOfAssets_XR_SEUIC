@@ -83,8 +83,8 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
         getView().showLoading();
         getModule().importExcelToDb(currentFile, new MainImportCallBack() {
             @Override
-            public void importDataToDb(List<School> list) {
-                getView().importExcelComplete(list);
+            public void importDataToDb(List<School> list, String currentFileName) {
+                getView().importExcelComplete(list, currentFileName);
                 getView().dismissLoading();
             }
 
@@ -129,6 +129,9 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
      */
     @Override
     public void exportExcel(String currentFileName, Context context) {
+        if (!isViewAttached()) {
+            return;
+        }
         getView().showLoading();
         getModule().exportExcel(currentFileName, context, new MainExportCallBack() {
             @Override
@@ -147,6 +150,20 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
             public void exportFailure() {
                 getView().onFailure();
                 getView().dismissLoading();
+            }
+        });
+    }
+
+    @Override
+    public void checkExcelCountDelete(String currentFileName) {
+        if (!isViewAttached()) {
+            return;
+        }
+        // 请求数据
+        getModule().checkExcelCountDelete(currentFileName, new MainCheckCallBack() {
+            @Override
+            public void checkDataToDb(int count) {
+                getView().checkExcelCountDelete(count);
             }
         });
     }

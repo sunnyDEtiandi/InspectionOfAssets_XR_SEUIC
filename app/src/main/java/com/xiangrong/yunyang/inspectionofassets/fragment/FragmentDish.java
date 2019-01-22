@@ -127,4 +127,5 @@ public class FragmentDish extends BaseMvpFragment<DishPresenter> implements Dish
             mFragmentDishAdapter.setDataNotify(mDbToSchoolList);
         }
     }
+
 }

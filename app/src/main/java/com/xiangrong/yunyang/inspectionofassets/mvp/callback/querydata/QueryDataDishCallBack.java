@@ -14,4 +14,6 @@ public interface QueryDataDishCallBack {
 
     void updateUIInitRecy(List<School> mDbToSchoolList);
 
+    void updateFailure();
+
 }

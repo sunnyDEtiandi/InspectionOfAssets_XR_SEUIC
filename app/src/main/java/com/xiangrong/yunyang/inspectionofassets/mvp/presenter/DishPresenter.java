@@ -35,6 +35,11 @@ public class DishPresenter extends BasePresenter<DishContract.Model, DishContrac
                 getView().getDishFragmentDetail(mDbToSchoolList);
                 getView().dismissLoading();
             }
+
+            @Override
+            public void updateFailure() {
+                getView().dismissLoading();
+            }
         });
     }
 }

@@ -178,6 +178,7 @@ public class MainModel implements MainContract.Model {
                     }
                     book.close();
                     saveDB(mList);
+                    importCallBack.importDataToDb(mList, currentFile.getName());
                     importCallBack.importSuccess();
                 } catch (Exception e) {
                     importCallBack.importFailure();
@@ -256,6 +257,25 @@ public class MainModel implements MainContract.Model {
                 } else {
                     exportCallBack.exportFailure();
                 }
+            }
+        }.execute();
+    }
+
+    @Override
+    public void checkExcelCountDelete(String currentFileName, MainCheckCallBack checkCallBack) {
+        new AsyncTask<Void, Void, Integer>() {
+            @Override
+            protected Integer doInBackground(Void... voids) {
+                final int count = LitePal
+                        .where("ownershipDataSheet = ?", currentFileName)
+                        .count(School.class);
+                return count;
+            }
+
+            @Override
+            protected void onPostExecute(Integer aVoid) {
+                super.onPostExecute(aVoid);
+                checkCallBack.checkDataToDb(aVoid);
             }
         }.execute();
     }
