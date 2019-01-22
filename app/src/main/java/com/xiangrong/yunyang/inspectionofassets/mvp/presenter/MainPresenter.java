@@ -125,7 +125,7 @@ public class MainPresenter extends BasePresenter<MainContract.Model, MainContrac
     }
 
     /**
-     * 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+     * 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
      */
     @Override
     public void exportExcel(String currentFileName, Context context) {

@@ -1,27 +1,23 @@
 package com.xiangrong.yunyang.inspectionofassets.fragment;
 
-
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.xiangrong.yunyang.inspectionofassets.R;
 import com.xiangrong.yunyang.inspectionofassets.adapter.DishFragmentAdapter;
+import com.xiangrong.yunyang.inspectionofassets.base.BaseMvpFragment;
 import com.xiangrong.yunyang.inspectionofassets.entity.CurrentFileName;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
-import com.xiangrong.yunyang.inspectionofassets.utils.StrUtil;
-import com.xiangrong.yunyang.inspectionofassets.view.dialog.LoadingDialog;
+import com.xiangrong.yunyang.inspectionofassets.mvp.contract.DishContract;
+import com.xiangrong.yunyang.inspectionofassets.mvp.presenter.DishPresenter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +28,11 @@ import java.util.List;
  * 文件    InspectionOfAssets
  * 描述   盘的碎片（盘盈——盘亏——无盈盘）
  */
-public class FragmentDish extends Fragment {
+public class FragmentDish extends BaseMvpFragment<DishPresenter> implements DishContract.View {
 
     private RecyclerView mRecyclerView;
 
     private DishFragmentAdapter mFragmentDishAdapter;
-
-    private LoadingDialog mLoadingDialog;
 
     private List<School> mDbToSchoolList;
 
@@ -52,12 +46,19 @@ public class FragmentDish extends Fragment {
         return fragmentWin;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_dish, container, false);
-        initView(view);
-        return view;
+    public int getContentViewId() {
+        return R.layout.fragment_dish;
+    }
+
+    @Override
+    protected void initAllMembersView(Bundle savedInstanceState) {
+        initView(mRootView);
+    }
+
+    @Override
+    protected DishPresenter createPresenter() {
+        return new DishPresenter();
     }
 
     private void initView(View view) {
@@ -87,29 +88,10 @@ public class FragmentDish extends Fragment {
     private void initRecy(View view) {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.query_fragment_recy_dish);
         mDbToSchoolList = new ArrayList<>();
-        mLoadingDialog = new LoadingDialog(getActivity(), "数据正在加载中...");
         mFragmentDishAdapter = new DishFragmentAdapter(getActivity(), mDbToSchoolList);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mFragmentDishAdapter);
-    }
-
-    /**
-     * 结束加载Dialog
-     */
-    private void stopLoading() {
-        if (mLoadingDialog != null && mLoadingDialog.isShowing()) {
-            mLoadingDialog.dismiss();
-        }
-    }
-
-    /**
-     * 开始加载Dialog
-     */
-    private void startLoading() {
-        if (mLoadingDialog != null && !mLoadingDialog.isShowing()) {
-            mLoadingDialog.show();
-        }
     }
 
     /**
@@ -118,50 +100,8 @@ public class FragmentDish extends Fragment {
      * @param string
      */
     private void findDbLitePal(String string) {
-        startLoading();
-        new AsyncTask<String, Void, Integer>() {
-
-            @Override
-            protected Integer doInBackground(String... params) {
-                try {
-                    mDbToSchoolList.clear();
-                    if (!StrUtil.isEmpty(ownershipDataSheetName)) {
-                        final int countDb = LitePal.count(School.class);
-                        if (countDb > 0) {
-                            if (params[0].equals("全部")) {
-                                mDbToSchoolList = LitePal
-                                        .where("ownershipDataSheet = ?", ownershipDataSheetName)
-                                        .find(School.class);
-                                mDbToSchoolList.remove(0);
-                            } else {
-                                mDbToSchoolList = LitePal
-                                        .where(
-                                                "ownershipDataSheet = ? and inventoryResults = ?",
-                                                ownershipDataSheetName, params[0])
-                                        .find(School.class);
-                            }
-                            return 1;
-                        }
-                    }
-                    return 0;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return 0;
-                }
-            }
-
-            @Override
-            protected void onPostExecute(Integer aVoid) {
-                super.onPostExecute(aVoid);
-                if (aVoid == 1) {
-                    if (mFragmentDishAdapter != null) {
-                        mFragmentDishAdapter.setDataNotify(mDbToSchoolList);
-                    }
-                } else {
-                }
-                stopLoading();
-            }
-        }.execute(string);
+        checkActivityAttached();
+        mPresenter.getDishFragmentDetail(ownershipDataSheetName, string);
     }
 
     @Override
@@ -179,5 +119,12 @@ public class FragmentDish extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onCurrentFileNameEvent(CurrentFileName currentFile) {
         ownershipDataSheetName = currentFile.getFileName();
+    }
+
+    @Override
+    public void getDishFragmentDetail(List<School> mDbToSchoolList) {
+        if (mFragmentDishAdapter != null) {
+            mFragmentDishAdapter.setDataNotify(mDbToSchoolList);
+        }
     }
 }

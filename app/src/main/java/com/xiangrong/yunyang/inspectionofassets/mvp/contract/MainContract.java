@@ -36,7 +36,7 @@ public interface MainContract {
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String currentFileName, Context context, MainDeleteCallBack deleteCallBack);
 
-        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String currentFileName, Context context, MainExportCallBack exportCallBack);
 
     }
@@ -61,7 +61,7 @@ public interface MainContract {
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String select_text_string);
 
-        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String select_text_string);
 
     }
@@ -80,7 +80,7 @@ public interface MainContract {
         // 删除——从本地数据库中删除数据（是依据“所属数据表”列进行删除）
         void deleteExcel(String currentFileName, boolean flag, Context context);
 
-        // 导出——从本地数据库中导出数据（是依据“所属数据表”列进行导出）
+        // 导出——从本地数据库中导出数据（是依据“所属数据表”列和实有数据大于0进行导出）
         void exportExcel(String currentFileName, Context context);
 
     }

@@ -8,6 +8,8 @@ import com.xiangrong.yunyang.inspectionofassets.mvp.contract.QueryDataContract;
 
 import org.litepal.LitePal;
 
+import java.util.List;
+
 /**
  * 作者    yunyang
  * 时间    2019/1/21 16:50
@@ -71,5 +73,6 @@ public class QueryDataModel implements QueryDataContract.Model {
             }
         }.execute();
     }
+
 
 }

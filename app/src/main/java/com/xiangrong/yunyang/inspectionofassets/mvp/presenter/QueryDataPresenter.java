@@ -1,9 +1,13 @@
 package com.xiangrong.yunyang.inspectionofassets.mvp.presenter;
 
 import com.xiangrong.yunyang.inspectionofassets.base.BasePresenter;
+import com.xiangrong.yunyang.inspectionofassets.entity.School;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.querydata.QueryDataCallBack;
+import com.xiangrong.yunyang.inspectionofassets.mvp.callback.querydata.QueryDataDishCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.contract.QueryDataContract;
 import com.xiangrong.yunyang.inspectionofassets.mvp.model.QueryDataModel;
+
+import java.util.List;
 
 /**
  * 作者    yunyang
@@ -12,6 +16,7 @@ import com.xiangrong.yunyang.inspectionofassets.mvp.model.QueryDataModel;
  * 描述   QueryDataActivity的控制类
  */
 public class QueryDataPresenter extends BasePresenter<QueryDataContract.Model, QueryDataContract.View> implements QueryDataContract.Presenter {
+
     @Override
     protected QueryDataContract.Model createModule() {
         return new QueryDataModel();
@@ -31,4 +36,5 @@ public class QueryDataPresenter extends BasePresenter<QueryDataContract.Model, Q
             }
         });
     }
+
 }

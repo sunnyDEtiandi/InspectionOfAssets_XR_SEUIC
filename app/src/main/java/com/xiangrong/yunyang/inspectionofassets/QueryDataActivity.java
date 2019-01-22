@@ -12,6 +12,7 @@ import com.xiangrong.yunyang.inspectionofassets.adapter.QueryDataAdapter;
 import com.xiangrong.yunyang.inspectionofassets.base.BaseMvpPresenterActivity;
 import com.xiangrong.yunyang.inspectionofassets.base.BasePresenter;
 import com.xiangrong.yunyang.inspectionofassets.entity.CurrentFileName;
+import com.xiangrong.yunyang.inspectionofassets.entity.School;
 import com.xiangrong.yunyang.inspectionofassets.fragment.FragmentDish;
 import com.xiangrong.yunyang.inspectionofassets.mvp.contract.QueryDataContract;
 import com.xiangrong.yunyang.inspectionofassets.mvp.presenter.QueryDataPresenter;
@@ -58,6 +59,7 @@ public class QueryDataActivity extends BaseMvpPresenterActivity<QueryDataPresent
     private void initData() {
         titleBackTitleLayout.setText(getString(R.string.text_result));
         mFragments = new ArrayList<>();
+        mPresenter.getTitleNameAndCount(ownershipDataSheetName);
     }
 
     @OnClick(R.id.image_back_title_layout)

@@ -14,7 +14,9 @@ import android.view.ViewGroup;
  * 文件    BaseMvp
  * 描述   单个Presenter
  */
-public abstract class BaseMvpFragment extends Fragment implements IBaseView {
+public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment implements IBaseView {
+
+    protected P mPresenter;
 
     public abstract int getContentViewId();
 
@@ -26,10 +28,26 @@ public abstract class BaseMvpFragment extends Fragment implements IBaseView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // 创建present
+        mPresenter = createPresenter();
+        if (mPresenter != null) {
+            mPresenter.attachView(this);
+        }
         mRootView = inflater.inflate(getContentViewId(), container, false);
         this.mContext = getActivity();
         initAllMembersView(savedInstanceState);
         return mRootView;
+    }
+
+    protected abstract P createPresenter();
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null) {
+            mPresenter.detachView();
+            mPresenter = null;
+        }
     }
 
     /**

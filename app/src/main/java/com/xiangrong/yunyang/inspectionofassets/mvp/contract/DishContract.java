@@ -3,35 +3,34 @@ package com.xiangrong.yunyang.inspectionofassets.mvp.contract;
 import com.xiangrong.yunyang.inspectionofassets.base.IBaseModel;
 import com.xiangrong.yunyang.inspectionofassets.base.IBaseView;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
-import com.xiangrong.yunyang.inspectionofassets.mvp.callback.querydata.QueryDataCallBack;
 import com.xiangrong.yunyang.inspectionofassets.mvp.callback.querydata.QueryDataDishCallBack;
 
 import java.util.List;
 
 /**
  * 作者    yunyang
- * 时间    2019/1/21 16:50
+ * 时间    2019/1/22 9:12
  * 文件    InspectionOfAssets
- * 描述   QueryDataActivity的契约类
+ * 描述   DishFragment的契约类
  */
-public interface QueryDataContract {
+public interface DishContract {
 
     interface Model extends IBaseModel {
 
-        // 获取全部，盘亏，无盈亏的数量
-        void getTitleNameAndCount(String ownershipDataSheetName, QueryDataCallBack queryDataCallBack);
+        // 盘碎片查询全部，盘亏，无盈亏的详情
+        void getDishFragmentDetail(String ownershipDataSheetName, String inventoryResults, QueryDataDishCallBack queryDataDishCallBack);
 
     }
 
     interface View extends IBaseView {
 
-        void getTitleNameAndCount(String[] titles);
+        void getDishFragmentDetail(List<School> mDbToSchoolList);
 
     }
 
     interface Presenter {
 
-        void getTitleNameAndCount(String ownershipDataSheetName);
+        void getDishFragmentDetail(String ownershipDataSheetName, String inventoryResults);
 
     }
 
