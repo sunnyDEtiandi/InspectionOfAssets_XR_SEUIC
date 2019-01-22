@@ -13,28 +13,8 @@ android {
     }
     buildTypes {
         release {
-            // 混淆
-            minifyEnabled true
-            // Zipalign优化
-            zipAlignEnabled true
-            //移除无用的resource文件
-            shrinkResources true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            applicationVariants.all { variant ->
-                variant.outputs.all { output ->  // each 改为 all
-//                    def fileName = "yunyang${variant.versionName}.apk"
-                    def fileName = "资产清查.apk"
-                    def outFile = output.outputFile
-                    if (outFile != null && outFile.name.endsWith('.apk')) {
-                        outputFileName = fileName  //  output.outputFile 改为 outputFileName
-                    }
-                    //删除unaligned apk
-                    if (output.zipAlign != null) {
-                        output.zipAlign.doLast {
-                        }
-                    }
-                }
-            }
         }
     }
     lintOptions {
