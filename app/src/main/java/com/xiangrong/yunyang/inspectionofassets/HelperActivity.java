@@ -24,6 +24,9 @@ public class HelperActivity extends AppCompatActivity {
         titleBackTitleLayout.setText(getString(R.string.text_helper));
     }
 
+    /**
+     * image_back_title_layout 回退按钮的点击事件
+     */
     @OnClick(R.id.image_back_title_layout)
     public void onViewClicked() {
         finish();

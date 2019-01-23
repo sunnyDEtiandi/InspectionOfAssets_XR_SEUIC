@@ -52,33 +52,49 @@ public class QueryDataActivity extends BaseMvpPresenterActivity<QueryDataPresent
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_query_data);
         ButterKnife.bind(this);
+        // EventBus的注册
         EventBus.getDefault().register(this);
         initData();
     }
 
+    /**
+     * 初始化数据
+     */
     private void initData() {
         titleBackTitleLayout.setText(getString(R.string.text_result));
         mFragments = new ArrayList<>();
         mPresenter.getTitleNameAndCount(ownershipDataSheetName);
     }
 
+    /**
+     * image_back_title_layout 回退按钮的点击事件
+     */
     @OnClick(R.id.image_back_title_layout)
     public void onViewClicked() {
         finish();
     }
 
+    /**
+     * 页面异常销毁后，需要保存的数据
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(POSITION, tabs.getSelectedTabPosition());
     }
 
+    /**
+     * 页面异常销毁后，重启后需要将保存的数据进行恢复
+     */
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         container.setCurrentItem(savedInstanceState.getInt(POSITION));
     }
 
+    /**
+     * EventBus的解注册
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -90,11 +106,17 @@ public class QueryDataActivity extends BaseMvpPresenterActivity<QueryDataPresent
         return new QueryDataPresenter();
     }
 
+    /**
+     * 拿到当前选中的Excel文件的名称
+     */
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onCurrentFileNameEvent(CurrentFileName currentFile) {
         ownershipDataSheetName = currentFile.getFileName();
     }
 
+    /**
+     * 初始化ViewPager + TabLayout + Fragment
+     */
     @Override
     public void getTitleNameAndCount(String[] titles) {
         mFragments.add(FragmentDish.newInstance(0));
@@ -109,6 +131,9 @@ public class QueryDataActivity extends BaseMvpPresenterActivity<QueryDataPresent
         }
     }
 
+    /**
+     * 设置TabLayout的一些属性
+     */
     private void setupTabLayout(TabLayout tabs) {
         tabs.setTabMode(TabLayout.MODE_FIXED);
         tabs.setTabGravity(TabLayout.GRAVITY_FILL);

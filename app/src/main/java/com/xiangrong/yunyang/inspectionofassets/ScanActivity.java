@@ -101,12 +101,18 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         initEvent();
     }
 
+    /**
+     * 初始化控件
+     */
     private void initView() {
         titleBackTitleLayout.setText(getString(R.string.text_inventory));
         itemNameIncludeLayout.setVisibility(View.INVISIBLE);
         mSchoolOnlyOne = new ArrayList<>();
     }
 
+    /**
+     * 初始化服务And广播
+     */
     private void initServiceOrBroadCast() {
         // 启动服务
         Intent intent = new Intent(this, ScannerService.class);
@@ -118,6 +124,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         spPool = new SoundPool(10, AudioManager.STREAM_SYSTEM, 5);
     }
 
+    /**
+     * 初始化监听事件
+     */
     private void initEvent() {
         editTextString.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -146,6 +155,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         mPresenter.assetsCodeFindDb(barCodeText);
     }
 
+    /**
+     * 更新UI界面
+     */
     private void drawUIFromData() {
         textStringZero.setText(mSchoolOnlyOne.get(0).getAssetNumber());
         textStringOne.setText(mSchoolOnlyOne.get(0).getAssetName());
@@ -179,6 +191,10 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         return new ScanPresenter();
     }
 
+    /**
+     * image_back_title_layout 回退按钮的点击事件
+     * btn_scan 盘点按钮的点击事件
+     */
     @OnClick({R.id.image_back_title_layout, R.id.btn_scan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -193,6 +209,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         }
     }
 
+    /**
+     * 当点击盘点按钮时，需要处理的操作
+     */
     private void submit() {
         // validate
         String string = editTextString.getText().toString().trim();
@@ -207,17 +226,26 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         KeyBoardUtils.closeKeybord(editTextString, ScanActivity.this);
     }
 
+    /**
+     * 盘点成功，更新UI页面
+     */
     @Override
     public void inventorySuccess() {
         mPresenter.updateDbFromPhy();
     }
 
+    /**
+     * 盘点失败，更新UI页面
+     */
     @Override
     public void inventoryFailure() {
         itemNameIncludeLayout.setVisibility(View.INVISIBLE);
         Toast.makeText(ScanActivity.this, "数据盘点失败，可能因为没有此盘点资产项", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * 依据盘点结果，更新实有数量
+     */
     @Override
     public void updateDbFromPhy(List<School> list, int tag) {
         mSchoolOnlyOne.clear();
@@ -365,6 +393,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         }
     }
 
+    /**
+     * 广播
+     */
     public class ScanReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -403,7 +434,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         }
     }
 
-    // 注册
+    /**
+     * 注册
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -412,7 +445,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         registerReceiver(mScanReceiver, mIntentFilter);
     }
 
-    //卸载
+    /**
+     * 卸载
+     */
     @Override
     protected void onPause() {
         // Unregister the receiver
@@ -422,12 +457,18 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         super.onPause();
     }
 
+    /**
+     * EventBus的注册
+     */
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * EventBus的解注册
+     */
     @Override
     public void onStop() {
         super.onStop();
@@ -441,6 +482,9 @@ public class ScanActivity extends BaseMvpPresenterActivity<ScanPresenter> implem
         super.onDestroy();
     }
 
+    /**
+     * 拿到扫描结果后进行更新UI页面
+     */
     @SuppressLint("SetTextI18n")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(BarCode barCode) {

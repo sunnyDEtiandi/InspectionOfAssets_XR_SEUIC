@@ -36,3 +36,7 @@ DataConversion项目修改为Mvp架构InspectionOfAssets项目结束。
 适配Android6.0权限机制。
 
 适配Android8.0图标。
+
+##### 2019/01/23——星期三
+
+添加注释，使得逻辑一眼望穿。

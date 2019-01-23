@@ -121,6 +121,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         }, 500);
     }
 
+    /**
+     * 初始化RecyclerView
+     */
     private void initRecy() {
         mPresenter.updateRecy();
         mIndexRecyAdapter = new IndexRecyAdapter(this, mRecyTextString, mRecyImageDrawable);
@@ -189,15 +192,24 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         });
     }
 
+    /**
+     * 删除
+     */
     private void checkDbDeleteExcel() {
         mPresenter.checkExcelCountDelete(currentFile.getName());
     }
 
+    /**
+     * 导出
+     */
     private void checkDbExportExcel() {
         mPresenter.exportExcel(currentFile.getName(), MainActivity.this);
         mPresenter.deleteExcel(currentFile.getName(), false, MainActivity.this);
     }
 
+    /**
+     * 导入
+     */
     private void checkDbImportExcel() {
         mPresenter.checkNameFromDb(currentFile.getName());
     }
@@ -231,25 +243,39 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         return super.onKeyDown(keyCode, event);
     }
 
+    /**
+     * select_text_db_file_excel 控件的点击事件
+     */
     @OnClick(R.id.select_text_db_file_excel)
     public void onViewClicked() {
+        // 申请权限
         MainActivityPermissionsDispatcher.initFileDirWithCheck(MainActivity.this);
         // 显示底部弹出框供用户选择Excel表
         mSlideFromBottomPopup.newPopupBottomShow();
     }
 
+    /**
+     * EventBus的注册
+     */
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * EventBus的解注册
+     */
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
 
+    /**
+     * 点击底部弹出框中某一项，将Item项名称（也就是Excel表名）返回给MainActivity，让
+     * selectTextDbFileExcel 控件进行修改文字，选中那张表。以及当前选中的文件。
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(ExpandMessage expandMessage) {
         final String fileName = expandMessage.getFileName();
@@ -265,6 +291,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         }
     }
 
+    /**
+     * 更新RecyclerView的列表数据
+     */
     @Override
     public void updateRecyData(List<String> recyTextData, List<Integer> recyDrawData) {
         mRecyTextString.clear();
@@ -273,6 +302,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         mRecyImageDrawable.addAll(recyDrawData);
     }
 
+    /**
+     * 检查导入的数据库是否存在，如果存在删除，重新导入（覆盖效果）
+     */
     @Override
     public void checkExcelNameFromDb(int count) {
         if (count > 0) {
@@ -305,6 +337,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         }
     }
 
+    /**
+     * 导入完成
+     */
     @Override
     public void importExcelComplete(List<School> list, String currentFileName) {
         runOnUiThread(new Runnable() {
@@ -317,6 +352,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         });
     }
 
+    /**
+     * 操作成功
+     */
     @Override
     public void onSuccess() {
         runOnUiThread(new Runnable() {
@@ -327,6 +365,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         });
     }
 
+    /**
+     * 操作失败
+     */
     @Override
     public void onFailure() {
         runOnUiThread(new Runnable() {
@@ -337,16 +378,25 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         });
     }
 
+    /**
+     * 删除本地数据库后，修改首页 selectTextDbFileExcel 文字
+     */
     @Override
     public void deleteExcel(String select_text_string) {
         selectTextDbFileExcel.setText(select_text_string);
     }
 
+    /**
+     * 导出本地数据库后，修改首页 selectTextDbFileExcel 文字
+     */
     @Override
     public void exportExcel(String select_text_string) {
         selectTextDbFileExcel.setText(select_text_string);
     }
 
+    /**
+     * 检查本地数据库，如果有数据，弹出Dialog，是否从本地数据库中移除当前Excel表格数据
+     */
     @Override
     public void checkExcelCountDelete(int count) {
         if (count > 0) {
@@ -373,19 +423,28 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
         }
     }
 
-
+    /**
+     * Android6.0权限机制
+     */
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void initFileDir() {
         // 创建特定文件夹以存放Excel表
         mFileDir = FileUtil.createDir("XR");
     }
 
+    /**
+     * 权限申请结果
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
 
+    /**
+     * 如果用户未申请权限，再次点击 selectTextDbFileExcel 控件的时候，（使用此功能）告诉用户为什么
+     * 要申请此权限，才能使用该功能。
+     */
     @OnShowRationale({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
     void whyReadWritePer(final PermissionRequest request) {
         new QMUIDialog.MessageDialogBuilder(MainActivity.this)
