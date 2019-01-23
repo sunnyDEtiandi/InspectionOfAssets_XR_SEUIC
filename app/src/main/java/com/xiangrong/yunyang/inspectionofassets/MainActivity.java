@@ -1,19 +1,28 @@
 package com.xiangrong.yunyang.inspectionofassets;
 
 import android.Manifest;
+import android.app.Notification;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
@@ -23,8 +32,14 @@ import com.xiangrong.yunyang.inspectionofassets.base.BaseMvpPresenterActivity;
 import com.xiangrong.yunyang.inspectionofassets.entity.CurrentFileName;
 import com.xiangrong.yunyang.inspectionofassets.entity.ExpandMessage;
 import com.xiangrong.yunyang.inspectionofassets.entity.School;
+import com.xiangrong.yunyang.inspectionofassets.entity.SystemInfo;
 import com.xiangrong.yunyang.inspectionofassets.mvp.contract.MainContract;
 import com.xiangrong.yunyang.inspectionofassets.mvp.presenter.MainPresenter;
+import com.xiangrong.yunyang.inspectionofassets.net.base.ApiService;
+import com.xiangrong.yunyang.inspectionofassets.net.base.ObserverCallBack;
+import com.xiangrong.yunyang.inspectionofassets.net.base.RestClient;
+import com.xiangrong.yunyang.inspectionofassets.net.base.ResultResponse;
+import com.xiangrong.yunyang.inspectionofassets.service.UpdateService;
 import com.xiangrong.yunyang.inspectionofassets.utils.FileUtil;
 import com.xiangrong.yunyang.inspectionofassets.utils.StrUtil;
 import com.xiangrong.yunyang.inspectionofassets.view.popup.SlideFromBottomPopup;
@@ -47,6 +62,9 @@ import java.util.Vector;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.OnShowRationale;
 import permissions.dispatcher.PermissionRequest;
@@ -86,6 +104,9 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     // 双击退出
     private long firsTime = 0;
 
+    // 自动更新
+    private AlertDialog dlg = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +124,13 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
      * 初始化控件
      */
     private void initView() {
+        // 创建特定文件夹以存放Excel表
+        mFileDir = FileUtil.createDir("XR");
         // 初始化数据库
         LitePal.getDatabase();
         mRecyTextString = new ArrayList<>();
         mRecyImageDrawable = new ArrayList<>();
         excelDataToDb = new ArrayList<>();
-        // 创建特定文件夹以存放Excel表
-        mFileDir = FileUtil.createDir("XR");
         mSlideFromBottomPopup =
                 new SlideFromBottomPopup(MainActivity.this, mFileDir.getAbsolutePath());
         initRecy();
@@ -250,6 +271,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     public void onViewClicked() {
         // 申请权限
         MainActivityPermissionsDispatcher.initFileDirWithCheck(MainActivity.this);
+        // 自动更新
+        getNewVersion();
         // 显示底部弹出框供用户选择Excel表
         mSlideFromBottomPopup.newPopupBottomShow();
     }
@@ -424,6 +447,107 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     }
 
     /**
+     * 自动更新
+     * 获取APP最新版本信息
+     */
+    private void getNewVersion() {
+        RestClient
+                .getRestClient()
+                .getSystemInfo()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ObserverCallBack<SystemInfo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        Log.e("云阳", "当前线程的名字" + Thread.currentThread().getName());
+                    }
+
+                    @Override
+                    protected void onSuccess(SystemInfo response) {
+                        if (response != null) {
+                            if (response.getVersionCode() > getLocalVersion(MainActivity.this)) {
+                                if (response.getAndroidInstallPath().endsWith(".apk")) {
+                                    getData(response.getVersionName(), response.getUpdateContent(),
+                                            response.getAndroidInstallPath());
+                                    Log.e("神奇奇迹", "response.getVersionName() = " + response.getVersionName()
+                                            + "  response.getUpdateContent() = " + response.getUpdateContent()
+                                            + "  response.getAndroidInstallPath() = " + response.getAndroidInstallPath());
+                                }
+                            }
+                        }
+                    }
+
+                });
+    }
+
+    /**
+     * 有新版本，显示更新弹窗
+     */
+    private void getData(String versionName, String msg, final String path) {
+        dlg = new AlertDialog.Builder(this, R.style.dialog).create();
+        dlg.show();
+        dlg.setCancelable(true);
+        Window window = dlg.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setContentView(R.layout.dialog_updataversion);
+        TextView tvmsg = (TextView) window.findViewById(R.id.updataversion_msg);
+        TextView tvcode = (TextView) window.findViewById(R.id.updataversion_title);
+        tvcode.setText(getString(R.string.update_text, versionName));
+        tvmsg.setText(msg);
+        Button button = window.findViewById(R.id.update_cancel);
+        Button linearLayout = window.findViewById(R.id.update_sure);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.cancel();
+            }
+        });
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dlg.cancel();
+                UpdateService
+                        .Builder
+//                        .create(ApiService.HOST + "XRData/" + path)
+                        .create(path)
+                        .setStoreDir("XRData/app/")  //APK文件夹
+                        .setDownloadSuccessNotificationFlag(Notification.DEFAULT_ALL)
+                        .setDownloadErrorNotificationFlag(Notification.DEFAULT_ALL)
+                        .build(MainActivity.this);
+            }
+        });
+    }
+
+    /**
+     * 获取本地软件版本号
+     */
+    public int getLocalVersion(Context ctx) {
+        int localVersion = 0;
+        try {
+            PackageInfo packageInfo = ctx.getApplicationContext()
+                    .getPackageManager()
+                    .getPackageInfo(ctx.getPackageName(), 0);
+            localVersion = packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return localVersion;
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            if (dlg.isShowing()) {
+                dlg.dismiss();
+            }
+        } catch (NullPointerException e) {
+        }
+        dlg = null;
+    }
+
+    /**
      * Android6.0权限机制
      */
     @NeedsPermission({Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE})
@@ -436,7 +560,8 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
      * 权限申请结果
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
@@ -467,4 +592,5 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                 })
                 .show();
     }
+
 }

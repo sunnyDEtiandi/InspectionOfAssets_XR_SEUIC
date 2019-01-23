@@ -15,4 +15,9 @@
         <item name="android:layout_margin">2dp</item>
     </style>
 
+    <!-- 自动更新 -->
+    <style name="dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

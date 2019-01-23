@@ -7,6 +7,8 @@
     <!-- 存储读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".app.App"
@@ -19,9 +21,22 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".QueryDataActivity" />
 
-        <!-- 特定设备 -->
-        <uses-library android:name="android.scanner.library" />
+        <!-- 全面屏适配（包括刘海屏） -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.1" />
+        <!-- 华为刘海适配 增加这个属性之后，系统就不会对应用进行下移处理 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
 
+        <!-- 自动更新 -->
+        <service android:name=".service.UpdateService" />
+
+        <!-- 特定设备 -->
+        <!--<uses-library android:name="android.scanner.library" />-->
+
+        <!-- 激光头扫描服务 -->
         <service android:name=".service.ScannerService" />
 
         <activity android:name=".ScanActivity" />

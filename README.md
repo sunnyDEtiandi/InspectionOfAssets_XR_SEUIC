@@ -48,3 +48,5 @@ DataConversion项目修改为Mvp架构InspectionOfAssets项目结束。
 Zipalign优化。
 
 移除无用的resource文件。
+
+添加自动更新功能。

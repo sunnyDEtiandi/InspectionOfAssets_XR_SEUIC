@@ -6,4 +6,13 @@
     <string name="text_helper">帮助</string>
     <string name="text_result">盘点结果</string>
     <string name="text_inventory">盘点</string>
+
+    <!-- 自动更新 -->
+    <string name="update_app_model_prepare">准备下载 %s</string>
+    <string name="update_app_model_progress">下载中 %1$d%2$s</string>
+    <string name="update_app_model_success">下载成功</string>
+    <string name="update_app_model_error">下载失败</string>
+    <string name="update">更新</string>
+    <string name="cancel">取消</string>
+    <string name="update_text">新版本  %s  更新啦</string>
 </resources>
