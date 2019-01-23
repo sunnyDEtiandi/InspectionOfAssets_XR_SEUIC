@@ -40,3 +40,5 @@ DataConversion项目修改为Mvp架构InspectionOfAssets项目结束。
 ##### 2019/01/23——星期三
 
 添加注释，使得逻辑一眼望穿。
+
+增加BaseMvpFragment的onCreate方法，里面设置setRetainInstance为 true，表示 当activity configuration change 的时候，fragment 实例不会被重新创建。

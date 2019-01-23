@@ -34,9 +34,16 @@ public abstract class BaseMvpFragment<P extends BasePresenter> extends Fragment 
             mPresenter.attachView(this);
         }
         mRootView = inflater.inflate(getContentViewId(), container, false);
-        this.mContext = getActivity();
         initAllMembersView(savedInstanceState);
         return mRootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 设置为 true，表示 当activity configuration change 的时候，fragment 实例不会被重新创建
+        setRetainInstance(true);
+        this.mContext = getActivity();
     }
 
     protected abstract P createPresenter();
