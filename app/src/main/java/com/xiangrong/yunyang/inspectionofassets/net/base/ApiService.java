@@ -19,6 +19,9 @@ public interface ApiService {
     String HOST = "http://47.104.211.140:90/";
     String API_SERVER_URL = HOST + "SystemInfoService/returnInfo/";
 
+//    String HOST = "http://192.168.2.163:8080/";
+//    String API_SERVER_URL = HOST + "AppInfo/";
+
     /**
      * 图片配置
      */
@@ -27,6 +30,7 @@ public interface ApiService {
     /**
      * 获取App信息
      */
+//    @POST("returnUrl.json")
     @POST("returnUrl")
     Observable<ResultResponse<SystemInfo>> getSystemInfo();
 

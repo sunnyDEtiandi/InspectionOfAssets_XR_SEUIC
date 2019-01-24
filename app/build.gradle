@@ -106,11 +106,12 @@ dependencies {
     // logging-interceptor
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.2'
     // retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    // gson+retrofit
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     // rx+retrofit
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.4.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     // rxjava
-    implementation "io.reactivex.rxjava2:rxjava:2.2.3"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.6"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 }

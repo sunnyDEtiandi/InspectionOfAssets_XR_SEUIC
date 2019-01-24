@@ -42,6 +42,7 @@ import com.xiangrong.yunyang.inspectionofassets.net.base.ResultResponse;
 import com.xiangrong.yunyang.inspectionofassets.service.UpdateService;
 import com.xiangrong.yunyang.inspectionofassets.utils.FileUtil;
 import com.xiangrong.yunyang.inspectionofassets.utils.StrUtil;
+import com.xiangrong.yunyang.inspectionofassets.utils.ToastUtils;
 import com.xiangrong.yunyang.inspectionofassets.view.popup.SlideFromBottomPopup;
 import com.zhl.userguideview.MeasureUtil;
 import com.zhl.userguideview.UserGuideView;
