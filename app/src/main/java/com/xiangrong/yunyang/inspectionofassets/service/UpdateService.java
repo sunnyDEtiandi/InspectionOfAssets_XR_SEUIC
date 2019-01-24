@@ -90,6 +90,7 @@ public class UpdateService extends Service {
         /**
          * set update progress call back
          * 设置更新进度回调
+         *
          * @param listener
          */
         public void setUpdateProgressListener(UpdateProgressListener listener) {
@@ -109,7 +110,7 @@ public class UpdateService extends Service {
     private DownloadApk downloadApkTask;
 
     /**
-     *  debug
+     * debug
      */
     public static void debug() {
         DEBUG = true;
@@ -121,8 +122,8 @@ public class UpdateService extends Service {
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Uri fileUri = FileProvider.getUriForFile(context, getFileProviderAuthority(context), new File(path));
-            intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
         } else {
             intent.setDataAndType(Uri.fromFile(new File(path)), "application/vnd.android.package-archive");
         }
@@ -153,7 +154,7 @@ public class UpdateService extends Service {
 
     private static String getSaveFileName(String downloadUrl) {
         if (downloadUrl == null || TextUtils.isEmpty(downloadUrl)) {
-            return  System.currentTimeMillis() + ".apk";
+            return System.currentTimeMillis() + ".apk";
         }
         return downloadUrl.substring(downloadUrl.lastIndexOf("/"));
     }
@@ -282,7 +283,7 @@ public class UpdateService extends Service {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void buildNotification() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //创建 通知通道  channelid和channelname是必须的（自己命名就好）
             NotificationChannel channel = new NotificationChannel("1",
                     "Channel1", NotificationManager.IMPORTANCE_DEFAULT);
@@ -294,8 +295,8 @@ public class UpdateService extends Service {
             if (manager != null) {
                 manager.createNotificationChannel(channel);
             }
-            builder = new NotificationCompat.Builder(this,"1");
-        }else{
+            builder = new NotificationCompat.Builder(this, "1");
+        } else {
             manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             builder = new NotificationCompat.Builder(this);
         }

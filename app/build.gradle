@@ -7,24 +7,24 @@ android {
         applicationId "com.xiangrong.yunyang.inspectionofassets"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 2
+        versionName "1.0.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
-            // 混淆
-            minifyEnabled true
-            // Zipalign优化
-            zipAlignEnabled true
-            // 原因是Gradle2.0以上版本minifyEnabled字段为true时已经包含了shrinkResources,
-            // 即在代码优化时会自动去掉多余资源,所以在打正式包时也不需要设置shrinkResources字段。
-            //移除无用的resource文件
-            shrinkResources true
+            minifyEnabled false
+//             混淆
+//            minifyEnabled true
+//             Zipalign优化
+//            zipAlignEnabled true
+//            移除无用的resource文件
+//            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->  // each 改为 all
-                    def fileName = "inventory${variant.versionName}.apk"
+                    def fileName = "inventory_v${variant.versionName}.apk"
                     def outFile = output.outputFile
                     if (outFile != null && outFile.name.endsWith('.apk')) {
                         outputFileName = fileName  //  output.outputFile 改为 outputFileName
@@ -38,6 +38,7 @@ android {
             }
         }
     }
+
     //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
     lintOptions {
         checkReleaseBuilds false

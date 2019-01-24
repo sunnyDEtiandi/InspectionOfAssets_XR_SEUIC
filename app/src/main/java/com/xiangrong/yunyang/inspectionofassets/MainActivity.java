@@ -271,10 +271,6 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     public void onViewClicked() {
         // 申请权限
         MainActivityPermissionsDispatcher.initFileDirWithCheck(MainActivity.this);
-        // 自动更新
-        getNewVersion();
-        // 显示底部弹出框供用户选择Excel表
-        mSlideFromBottomPopup.newPopupBottomShow();
     }
 
     /**
@@ -459,7 +455,6 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                 .subscribe(new ObserverCallBack<SystemInfo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        Log.e("云阳", "当前线程的名字" + Thread.currentThread().getName());
                     }
 
                     @Override
@@ -469,9 +464,6 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
                                 if (response.getAndroidInstallPath().endsWith(".apk")) {
                                     getData(response.getVersionName(), response.getUpdateContent(),
                                             response.getAndroidInstallPath());
-                                    Log.e("神奇奇迹", "response.getVersionName() = " + response.getVersionName()
-                                            + "  response.getUpdateContent() = " + response.getUpdateContent()
-                                            + "  response.getAndroidInstallPath() = " + response.getAndroidInstallPath());
                                 }
                             }
                         }
@@ -554,6 +546,10 @@ public class MainActivity extends BaseMvpPresenterActivity<MainPresenter> implem
     void initFileDir() {
         // 创建特定文件夹以存放Excel表
         mFileDir = FileUtil.createDir("XR");
+        // 自动更新
+        getNewVersion();
+        // 显示底部弹出框供用户选择Excel表
+        mSlideFromBottomPopup.newPopupBottomShow();
     }
 
     /**

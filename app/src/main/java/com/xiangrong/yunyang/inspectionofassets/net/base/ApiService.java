@@ -16,7 +16,7 @@ public interface ApiService {
     /**
      * 接口Url
      */
-    String HOST = "http://192.168.1.83:8080/";
+    String HOST = "http://47.104.211.140:90/";
     String API_SERVER_URL = HOST + "SystemInfoService/returnInfo/";
 
     /**
