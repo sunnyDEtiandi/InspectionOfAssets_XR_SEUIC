@@ -302,3 +302,6 @@
 -keep class butterknife.*
 -keepclasseswithmembernames class * { @butterknife.* <methods>; }
 -keepclasseswithmembernames class * { @butterknife.* <fields>; }
+# AndroidAutoSize
+-keep class me.jessyan.autosize.** { *; }
+-keep interface me.jessyan.autosize.** { *; }

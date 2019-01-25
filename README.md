@@ -75,3 +75,5 @@ Zipalign优化。
 - 移除无用的resource文件。
 
 由于之前加上混淆之后，网络请求访问不通，一直在查找原因，昨天发现，原来是在net.base包下还有entity实体类未被混淆。（因为之前已经在混淆文件中加上了混淆具体entity包下的实体类）最后把net.base包下的ResultResponse.java和ResultResponseWeb.java实体类放到混淆的具体的entity包下。最后网络请求访问成功。
+
+Android屏幕适配，以宽为基准进行适配

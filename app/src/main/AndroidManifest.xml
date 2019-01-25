@@ -42,6 +42,14 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".QueryDataActivity" />
 
+        <!-- 以宽为基准进行dp适配 -->
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="360" />
+        <!--<meta-data-->
+        <!--android:name="design_height_in_dp"-->
+        <!--android:value="640" />-->
+
         <!-- 全面屏适配（包括刘海屏） -->
         <meta-data
             android:name="android.max_aspect"
@@ -65,7 +73,7 @@
         </provider>
 
         <!-- 特定设备 -->
-        <uses-library android:name="android.scanner.library" />
+        <!--<uses-library android:name="android.scanner.library" />-->
 
         <!-- 激光头扫描服务 -->
         <service android:name=".service.ScannerService" />
@@ -79,6 +87,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
