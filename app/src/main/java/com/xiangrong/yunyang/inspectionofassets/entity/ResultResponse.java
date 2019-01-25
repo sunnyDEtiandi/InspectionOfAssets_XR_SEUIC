@@ -1,4 +1,4 @@
-package com.xiangrong.yunyang.inspectionofassets.net.base;
+package com.xiangrong.yunyang.inspectionofassets.entity;
 
 /**
  * 作者    yunyang

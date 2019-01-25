@@ -2,6 +2,8 @@ package com.xiangrong.yunyang.inspectionofassets.net.base;
 
 import android.util.Log;
 
+import com.xiangrong.yunyang.inspectionofassets.entity.ResultResponse;
+
 /**
  * 作者    yunyang
  * 时间    2019/1/23 14:48

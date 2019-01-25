@@ -1,5 +1,6 @@
 package com.xiangrong.yunyang.inspectionofassets.net.base;
 
+import com.xiangrong.yunyang.inspectionofassets.entity.ResultResponse;
 import com.xiangrong.yunyang.inspectionofassets.entity.SystemInfo;
 
 import io.reactivex.Observable;

@@ -4,7 +4,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.xiangrong.yunyang.inspectionofassets.utils.ToastUtils;
+import com.xiangrong.yunyang.inspectionofassets.entity.ResultResponse;
+import com.xiangrong.yunyang.inspectionofassets.entity.ResultResponseWeb;
 
 import java.net.ConnectException;
 import java.net.SocketException;

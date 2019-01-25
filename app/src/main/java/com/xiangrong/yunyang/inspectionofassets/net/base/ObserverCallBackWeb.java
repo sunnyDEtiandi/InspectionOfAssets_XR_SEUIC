@@ -1,5 +1,7 @@
 package com.xiangrong.yunyang.inspectionofassets.net.base;
 
+import com.xiangrong.yunyang.inspectionofassets.entity.ResultResponseWeb;
+
 /**
  * 作者    yunyang
  * 时间    2019/1/23 14:49
