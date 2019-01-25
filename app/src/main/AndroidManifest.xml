@@ -73,7 +73,7 @@
         </provider>
 
         <!-- 特定设备 -->
-        <!--<uses-library android:name="android.scanner.library" />-->
+        <uses-library android:name="android.scanner.library" />
 
         <!-- 激光头扫描服务 -->
         <service android:name=".service.ScannerService" />
